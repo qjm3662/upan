@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="upan:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="upan.war">
+      <element id="artifact" artifact-name="upan:war exploded" />
+    </root>
+  </artifact>
+</component>

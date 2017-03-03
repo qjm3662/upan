@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!--指定链接数据库所用的驱动-->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <!--指定链接数据库的url-->
+        <property name="connection.url">jdbc:mysql://123.207.96.66:3306/you_yun?useUnicode=true&amp;characterEncoding=utf8&amp;
+            zeroDateTimeBehavior=convertToNull&amp;useSSL=false&amp;serverTimezone=UTC
+        </property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">ilove456789</property>
+        <!--指定连接池里的最大连接数-->
+        <property name="hibernate.c3p0.max_size">20</property>
+        <!--指定连接池里的最小连接数-->
+        <property name="hibernate.c3p0.min_size">1</property>
+        <!--指定连接池里连接的超时时长-->
+        <property name="hibernate.c3p0.timeout">5000</property>
+
+        <!--指定连接池里最大缓存多少个Statement对象-->
+
+
+        <property name="c3p0.max_statements">100</property>
+
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+
+        <property name="hibernate.c3p0.acquire_increment">2</property>
+
+        <!--指定数据库方言-->
+
+
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+
+        <!-- （根据需要自动创建数据表)DB schema will be updated if needed -->
+
+
+        <property name="hbm2ddl.auto">update</property>
+
+        <property name="show_sql">true</property>
+
+        <property name="format_sql">true</property>
+
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <property name="current_session_context_class">thread</property>
+
+
+
+
+        <mapping class="cn.qjm253.entity.User"/>
+
+        <mapping class="cn.qjm253.entity.FileInfo"/>
+
+        <mapping class="cn.qjm253.entity.FeedBack"/>
+
+        <mapping class="cn.qjm253.entity.FollowInfo"/>
+
+    </session-factory>
+</hibernate-configuration>
