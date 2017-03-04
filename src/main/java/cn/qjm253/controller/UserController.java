@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Created by qjm3662 on 2017/3/4 0004.
  */
@@ -19,7 +21,7 @@ public class UserController extends BaseController{
 
 //    @RequestMapping(value = "/register", produces = "text/html;charset=UTF-8")
 //    public @ResponseBody String register(@RequestParam("username") String username, @RequestParam("password") String password,
-//                                         @RequestParam(value = "sex", required = false) int sex){
+//                                         @RequestParam(value = "sex", required = false) int sex, HttpServletResponse response){
 //
 //    }
 
