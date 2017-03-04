@@ -19,10 +19,15 @@ import java.util.List;
  * Created by Administrator on 2017/3/3/003.
  */
 @Transactional
-public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK>{
+public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
     private Class<T> tClass;
 
-
+    /**
+     * 保存对象到数据库
+     *
+     * @param transientObject
+     * @return
+     */
     public boolean save(T transientObject) {
         try {
             Session session = HibernateUtil.currentSession();
@@ -37,18 +42,17 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK>{
     }
 
 
-
     public T get(PK id) {
         Session session = HibernateUtil.currentSession();
         Transaction transaction = session.beginTransaction();
-        T t= session.get(tClass, id);
+        T t = session.get(tClass, id);
+        transaction.commit();
         return t;
     }
 
     public boolean update(T transientObject) {
         try {
             Session session = HibernateUtil.currentSession();
-//            session.saveOrUpdate();
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -58,7 +62,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK>{
 
     public boolean delete(T persistObject) {
         try {
-//            hibernateTemplate.delete(persistObject);
+
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -66,17 +70,42 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK>{
         }
     }
 
-    public T findOne(String hql, Object... params) {
+    public T query(String hql, String[] paramsName, Object... params) {
+        try {
+            List list = query_(hql, paramsName, params);
+            return (T) list.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
+        }
     }
 
-
-    public List<T> findAll(String hql, Object... params) {
-        return null;
+    public List<T> queryAll(String hql, String[] paramsName, Object... params) {
+        try {
+            List<T> list = query_(hql, paramsName, params);
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public List<T> queryAll(String hql, Object... params) {
-        return null;
+    public List query_(String hql, String[] paramsName, Object... params) throws Exception {
+        Session session = HibernateUtil.currentSession();
+        Transaction t = session.beginTransaction();
+        Query query = session.createQuery(hql);
+        if(params.length != paramsName.length){
+            return null;
+        }
+        for (int i = 0; i < params.length; i++) {
+            query.setParameter(paramsName[i], params[i]);
+        }
+        List list = query.list();
+        t.commit();
+        if (list.size() == 0) {
+            return null;
+        }
+        return list;
     }
 
 }

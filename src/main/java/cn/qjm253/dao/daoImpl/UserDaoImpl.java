@@ -10,4 +10,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository(value = "userDaoImpl")
 public class UserDaoImpl extends BaseDaoImpl<User, Integer>{
+
 }

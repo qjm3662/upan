@@ -5,49 +5,29 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!--<context:property-placeholder location="classpath:properties/jdbc.properties" ignore-unresolvable="true"/>-->
-
-    <!--<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
-        <!--<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>-->
-        <!--<property name="url" value="jdbc:mysql://123.207.96.66:3306/you_yun?useUnicode=true&amp;characterEncoding=utf8&amp;-->
-            <!--zeroDateTimeBehavior=convertToNull&amp;useSSL=false&amp;serverTimezone=UTC" />-->
-        <!--<property name="username" value="root"/>-->
-        <!--<property name="password" value="ilove456789"/>-->
-        <!--<property name="initialSize" value="2"/>-->
-        <!--&lt;!&ndash; 连接池最大数量 &ndash;&gt;-->
-        <!--<property name="maxActive" value="${jdbc.max_size}"/>-->
-        <!--&lt;!&ndash; 连接池最大空闲 &ndash;&gt;-->
-        <!--<property name="maxIdle" value="${jdbc.max_size}"/>-->
-        <!--&lt;!&ndash; 连接池最小空闲 &ndash;&gt;-->
-        <!--<property name="minIdle" value="${jdbc.min_size}"/>-->
-        <!--&lt;!&ndash; 获取连接最大等待时间 &ndash;&gt;-->
-        <!--<property name="maxWait" value="${jdbc.timeout}"/>-->
+    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">-->
+        <!--<property name="driverClass" value="${driverClass}"/>-->
+        <!--<property name="jdbcUrl" value="${jdbcUrl}"/>-->
+        <!--<property name="user" value="${user}"/>-->
+        <!--<property name="password" value="${password}"/>-->
+        <!--<property name="maxPoolSize" value="${maxPoolSize}"/>-->
+        <!--<property name="minPoolSize" value="${minPoolSize}"/>-->
+        <!--<property name="initialPoolSize" value="${initialPoolSize}"/>-->
+        <!--<property name="maxIdleTime" value="${maxIdleTime}"/>-->
     <!--</bean>-->
 
-    <!--<bean name="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">-->
+
+    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
         <!--<property name="dataSource" ref="dataSource"/>-->
-        <!--<property name="packagesToScan" value="cn.qjm253.entity"/>-->
         <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
         <!--<property name="hibernateProperties">-->
             <!--<props>-->
-                <!--<prop key="current_session_context_class">thread</prop>-->
-                <!--<prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>-->
-                <!--<prop key="hbm2ddl.auto">update</prop>-->
-                <!--<prop key="show_sql">true</prop>-->
-                <!--<prop key="format_sql">true</prop>-->
+            <!--<prop key="current_session_context_class">thread</prop>-->
+            <!--<prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>-->
+            <!--<prop key="hbm2ddl.auto">update</prop>-->
+            <!--<prop key="show_sql">true</prop>-->
+            <!--<prop key="format_sql">true</prop>-->
             <!--</props>-->
         <!--</property>-->
     <!--</bean>-->
-
-    <!--<bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">-->
-        <!--<property name="sessionFactory" value="#{sessionFactory}">-->
-        <!--</property>-->
-    <!--</bean>-->
-
-    <!--<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">-->
-        <!--<property name="sessionFactory" value="#{sessionFactory}"/>-->
-        <!--&lt;!&ndash;这个叫SpEL，如果不用这个，就要写成<property name="sessionFactory" ref="sessionFactory"/>&ndash;&gt;-->
-        <!--&lt;!&ndash;SpEL与属性占位符是有区别的，属性占位符是引用外面properties的值，而SpEL是运行时装配&ndash;&gt;-->
-    <!--</bean>-->
-    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
-
 </beans>

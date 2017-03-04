@@ -1,5 +1,7 @@
 package cn.qjm253.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 /**
@@ -15,18 +17,14 @@ public class FileInfo {
     @Column(length = 6)
     private String identifyCode;
     private long createTime;
+    @JsonIgnore
     private long updateTime;
     private int downloadCount;
     private boolean isPublic;
-    private String saveName;        //包含了UUID码的文件名
+    private transient String saveName;        //包含了UUID码的文件名
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "uid")
     private transient User owner;
-
-    @Transient
-    private int code;
-    @Transient
-    private String codeMSG;
 
     public FileInfo() {
     }
@@ -42,6 +40,14 @@ public class FileInfo {
         this.saveName = saveName;
     }
 
+    public FileInfo(int fid, String fileName, String fileSize, String identifyCode, long createTime, long updateTime) {
+        this.fid = fid;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.identifyCode = identifyCode;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
 
     public User getOwner() {
         return owner;
@@ -122,21 +128,5 @@ public class FileInfo {
     public void setSaveName(String saveName) {
 
         this.saveName = saveName;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getCodeMSG() {
-        return codeMSG;
-    }
-
-    public void setCodeMSG(String codeMSG) {
-        this.codeMSG = codeMSG;
     }
 }

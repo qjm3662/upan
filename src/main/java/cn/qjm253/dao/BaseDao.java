@@ -40,11 +40,9 @@ public interface BaseDao<T, PK extends Serializable> {
     boolean delete(T persistObject);
 
 
-    T findOne(String hql, Object... params);
-
-    List<T> findAll(String hql, Object... params);
+    T query(String hql, String[] paramsName, Object... params);
 
     boolean save(T transientObject);
 
-    List<T> queryAll(String hql, Object... params);
+    List<T> queryAll(String hql, String[] paramsName, Object... params);
 }

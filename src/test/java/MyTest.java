@@ -9,7 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,15 +63,24 @@ public class MyTest {
 
     @Test
     public void queryUserInfo() {
-        User u1 = new User("Robbin1", "123456", "null", "The better day", 1);
+//        List list = session.createQuery("from User u where u.username = :name")
+//                .setParameter("name", "Robbin1")
+//                .list();
+//        System.out.println(Arrays.toString(list.toArray()));
 
+        String hql = "select new FileInfo(fileName, fileSize, identifyCode, createTime, updateTime) from FileInfo f where f.identifyCode = ?";
+//        String hql = "select new FileInfo(fileName, fileSize, identifyCode, createTime, updateTime, owner) from FileInfo f where f.identifyCode = ?";
+
+        List list = session.createQuery(hql)
+                .setParameter(0, "sdfvse")
+                .list();
+        System.out.println(Arrays.toString(list.toArray()));
     }
 
     @After
     public void destroy() {
         if (t != null) {
             t.commit();
-            HibernateUtil.closeSession();
         }
 
     }

@@ -27,7 +27,7 @@ public class User {
     @Transient
     private int code;
     @Transient
-    private String codeMSG;
+    private transient String codeMSG;
 
 
     public User() {
@@ -119,5 +119,21 @@ public class User {
 
     public void setSex(int sex) {
         this.sex = sex;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uid=" + uid +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", signature='" + signature + '\'' +
+                ", sex=" + sex +
+                ", shares=" + shares +
+                ", followInfo=" + followInfo +
+                ", code=" + code +
+                ", codeMSG='" + codeMSG + '\'' +
+                '}';
     }
 }
