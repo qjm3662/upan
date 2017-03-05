@@ -29,15 +29,17 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
      * @return
      */
     public boolean save(T transientObject) {
+        Session session = HibernateUtil.currentSession();
+        Transaction t = session.beginTransaction();
         try {
-            Session session = HibernateUtil.currentSession();
-            Transaction t = session.beginTransaction();
             session.save(transientObject);
-            t.commit();
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
             return false;
+        }finally {
+            t.commit();
+            HibernateUtil.closeSession();
         }
     }
 
@@ -47,6 +49,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         Transaction transaction = session.beginTransaction();
         T t = session.get(tClass, id);
         transaction.commit();
+        HibernateUtil.closeSession();
         return t;
     }
 
@@ -73,6 +76,9 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
     public T query(String hql, String[] paramsName, Object... params) {
         try {
             List list = query_(hql, paramsName, params);
+            if(list == null || list.size() == 0){
+                return null;
+            }
             return (T) list.get(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,6 +101,8 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         Transaction t = session.beginTransaction();
         Query query = session.createQuery(hql);
         if(params.length != paramsName.length){
+            t.commit();
+            HibernateUtil.closeSession();
             return null;
         }
         for (int i = 0; i < params.length; i++) {
@@ -102,6 +110,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         }
         List list = query.list();
         t.commit();
+        HibernateUtil.closeSession();
         if (list.size() == 0) {
             return null;
         }

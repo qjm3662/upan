@@ -2,6 +2,7 @@ import cn.qjm253.entity.FileInfo;
 import cn.qjm253.entity.FollowInfo;
 import cn.qjm253.entity.User;
 import cn.qjm253.utils.HibernateUtil;
+import org.apache.shiro.codec.Base64;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.After;
@@ -61,20 +62,29 @@ public class MyTest {
 //        session.save(u1);
 //    }
 
-    @Test
-    public void queryUserInfo() {
-//        List list = session.createQuery("from User u where u.username = :name")
-//                .setParameter("name", "Robbin1")
+//    @Test
+//    public void queryUserInfo() {
+////        List list = session.createQuery("from User u where u.username = :name")
+////                .setParameter("name", "Robbin1")
+////                .list();
+////        System.out.println(Arrays.toString(list.toArray()));
+//
+//        String hql = "select new FileInfo(fileName, fileSize, identifyCode, createTime, updateTime) from FileInfo f where f.identifyCode = ?";
+////        String hql = "select new FileInfo(fileName, fileSize, identifyCode, createTime, updateTime, owner) from FileInfo f where f.identifyCode = ?";
+//
+//        List list = session.createQuery(hql)
+//                .setParameter(0, "sdfvse")
 //                .list();
 //        System.out.println(Arrays.toString(list.toArray()));
+//    }
 
-        String hql = "select new FileInfo(fileName, fileSize, identifyCode, createTime, updateTime) from FileInfo f where f.identifyCode = ?";
-//        String hql = "select new FileInfo(fileName, fileSize, identifyCode, createTime, updateTime, owner) from FileInfo f where f.identifyCode = ?";
-
-        List list = session.createQuery(hql)
-                .setParameter(0, "sdfvse")
-                .list();
-        System.out.println(Arrays.toString(list.toArray()));
+    @Test
+    public void test(){
+        String s = "dsaffasdg";
+        System.out.println(Base64.encodeToString(s.getBytes()));
+        System.out.println(Base64.encodeToString(s.getBytes()));
+        System.out.println(Base64.encodeToString(s.getBytes()));
+        System.out.println(Base64.encodeToString(s.getBytes()));
     }
 
     @After

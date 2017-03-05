@@ -11,6 +11,9 @@
     <title>首页</title>
 </head>
 <body>
-    <a href="/GetFileInfoAction/sdfvse">test</a>
+    <a href="/GetFileInfoAction/sdfvse">test</a><br/>
+    <a href="upload.jsp">上传文件测试</a><br/>
+    <a href="registerTest.jsp">注册测试</a><br/>
+    <a href="loginTest.jsp">登录测试</a>
 </body>
 </html>

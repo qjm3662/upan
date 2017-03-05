@@ -1,5 +1,6 @@
 package cn.qjm253.controller;
 
+import cn.qjm253.dao.daoImpl.Auth;
 import cn.qjm253.dao.daoImpl.FeedBackDaoImpl;
 import cn.qjm253.dao.daoImpl.FileDaoImpl;
 import cn.qjm253.dao.daoImpl.UserDaoImpl;
@@ -17,6 +18,9 @@ public class BaseController {
     protected FileDaoImpl fileDao;
     @Autowired
     protected FeedBackDaoImpl feedBackDao;
+    @Autowired
+    protected Auth auth;
+
     public static Gson gson = new GsonBuilder().serializeNulls().create();
 
     public String createHql(String hql, String objectName, String[] paramsName){
@@ -25,6 +29,11 @@ public class BaseController {
         }
         if(paramsName.length == 1){
             hql += " where " + objectName + "." + paramsName[0] + "=:" + paramsName[0];
+        }else{
+            hql += " where " + objectName + "." + paramsName[0] + "=:" + paramsName[0];
+            for (int i = 1; i < paramsName.length; i++) {
+                hql += " and " + objectName + "." + paramsName[i] + "=:" + paramsName[i];
+            }
         }
         return hql;
     }

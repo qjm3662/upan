@@ -13,7 +13,7 @@ public class FileInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)     //主键自增
     private int fid;
     private String fileName;
-    private String fileSize;
+    private double fileSize;
     @Column(length = 6)
     private String identifyCode;
     private long createTime;
@@ -21,15 +21,13 @@ public class FileInfo {
     private long updateTime;
     private int downloadCount;
     private boolean isPublic;
-    private transient String saveName;        //包含了UUID码的文件名
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "uid")
-    private transient User owner;
+    private String saveName;        //包含了UUID码的文件名
+    private String owner;
 
     public FileInfo() {
     }
 
-    public FileInfo(String fileName, String fileSize, String identifyCode, long createTime, long updateTime, int downloadCount, boolean isPublic, String saveName) {
+    public FileInfo(String fileName, double fileSize, String identifyCode, long createTime, long updateTime, int downloadCount, boolean isPublic, String saveName) {
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.identifyCode = identifyCode;
@@ -40,7 +38,7 @@ public class FileInfo {
         this.saveName = saveName;
     }
 
-    public FileInfo(int fid, String fileName, String fileSize, String identifyCode, long createTime, long updateTime) {
+    public FileInfo(int fid, String fileName, double fileSize, String identifyCode, long createTime, long updateTime) {
         this.fid = fid;
         this.fileName = fileName;
         this.fileSize = fileSize;
@@ -49,11 +47,11 @@ public class FileInfo {
         this.updateTime = updateTime;
     }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
@@ -73,11 +71,11 @@ public class FileInfo {
         this.fileName = fileName;
     }
 
-    public String getFileSize() {
+    public double getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(double fileSize) {
         this.fileSize = fileSize;
     }
 

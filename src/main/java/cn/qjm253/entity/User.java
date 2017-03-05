@@ -15,6 +15,7 @@ public class User {
     private int uid;
     private String username;
     private String password;
+    private String nickname;
     private String avatar;
     private String signature;
     private int sex;
@@ -24,13 +25,14 @@ public class User {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fi_id")
     private FollowInfo followInfo;
-    @Transient
-    private int code;
-    @Transient
-    private transient String codeMSG;
 
 
     public User() {
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public User(String username, String password, String avatar, String signature, int sex) {
@@ -41,20 +43,12 @@ public class User {
         this.sex = sex;
     }
 
-    public int getCode() {
-        return code;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getCodeMSG() {
-        return codeMSG;
-    }
-
-    public void setCodeMSG(String codeMSG) {
-        this.codeMSG = codeMSG;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public FollowInfo getFollowInfo() {
@@ -132,8 +126,6 @@ public class User {
                 ", sex=" + sex +
                 ", shares=" + shares +
                 ", followInfo=" + followInfo +
-                ", code=" + code +
-                ", codeMSG='" + codeMSG + '\'' +
                 '}';
     }
 }

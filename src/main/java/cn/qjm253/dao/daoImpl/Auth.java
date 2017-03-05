@@ -1,6 +1,7 @@
-package cn.qjm253.utils;
+package cn.qjm253.dao.daoImpl;
 
 import cn.qjm253.entity.User;
+import cn.qjm253.utils.Config;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,7 +17,7 @@ import java.net.URLEncoder;
 /**
  * Created by qjm3662 on 2017/3/4 0004.
  */
-@Repository("Auth")
+@Repository("auth")
 public class Auth {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -59,14 +60,10 @@ public class Auth {
         }
         try {
             value = URLDecoder.decode(value, "UTF-8");
-            User user = gson.fromJson(value, User.class);
-            return user;
+            return gson.fromJson(value, User.class);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
         }
     }
-
-
-
 }

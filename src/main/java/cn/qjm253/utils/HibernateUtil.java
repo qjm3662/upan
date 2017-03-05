@@ -31,7 +31,7 @@ public class HibernateUtil {
         //通过线程对象.get()方法安全创建Session
         Session s = session.get();
         if(s == null){
-            s = sessionFactory.getCurrentSession();
+            s = sessionFactory.openSession();
             session.set(s);
         }
         return s;

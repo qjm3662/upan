@@ -4,7 +4,13 @@ package cn.qjm253.utils;
  * Created by qjm3662 on 2017/1/23.
  */
 public class CodeMSG {
+    public static final String CODE = "code";
+    public static final String ERR_MSG = "errMSG";
+
+
     public static final int ALREADY_LOGIN = 0;              //正常登陆状态
+    public static final int SUCCESS = 0;
+    public static final int FAIL = -11;
     public static final int USERNAME_OR_PASSWORD_ERROR = -1; //用户名或密码错误
     public static final int CODE_ERROR = -2;                 //没有此文件可以下载，即验证码错误
     public static final int NO_CODE_ERROR = -3;                   //没有输入验证码
@@ -41,6 +47,8 @@ public class CodeMSG {
                 return "用户不存在或关注对象不存在";
             case PASSWORD_ERROR:
                 return "密码错误";
+            case FAIL:
+                return "失败";
             default:
                 return "默认信息";
         }
