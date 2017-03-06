@@ -5,15 +5,14 @@ import cn.qjm253.utils.CodeMSG;
 import cn.qjm253.utils.Config;
 import org.apache.shiro.codec.Base64;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Observable;
 
 /**
  * Created by qjm3662 on 2017/3/4 0004.
@@ -22,12 +21,6 @@ import java.util.Observable;
 @RequestMapping(value = "/user")
 public class UserController extends BaseController{
     public static final String DEFAULT_AVATAR_PATH = Config.url + "/download?fileName=default_avatar.jpg";
-
-    @RequestMapping(value = "/login", produces = "text/json;charset=UTF-8")
-    public @ResponseBody String login(){
-
-        return "";
-    }
 
     @RequestMapping(value = "/register", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public @ResponseBody
@@ -93,5 +86,13 @@ public class UserController extends BaseController{
         }
         return result;
     }
+
+//
+//    @RequestMapping(value = "/ModifyUserInfoAction", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
+//    public @ResponseBody Map<String, Object> modifyUserInfoAction(@RequestParam String nickname, @RequestParam String signatue,
+//                                                                  @RequestParam int sex){
+//
+//
+//    }
 
 }

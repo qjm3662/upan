@@ -50,7 +50,7 @@ public class FileController extends BaseController{
         return null;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public @ResponseBody Map<String, Object> upload(@RequestParam(value = "file")CommonsMultipartFile file, HttpServletRequest request){
         Map<String, Object> result = new HashMap<String, Object>();
         String fileName = file.getOriginalFilename();
@@ -86,7 +86,7 @@ public class FileController extends BaseController{
     }
 
 
-    @RequestMapping(value = "/user/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/upload", method = RequestMethod.POST, produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public @ResponseBody Map<String, Object> uploadFileAfterLogin(@RequestParam(value = "file") CommonsMultipartFile file, @RequestParam(value = "isPublic") boolean isPublic,  HttpServletRequest request){
         Map<String, Object> result = new HashMap<String, Object>();
         String fileName = file.getOriginalFilename();
@@ -97,6 +97,7 @@ public class FileController extends BaseController{
         if(user == null){
             return upload(file, request);
         }
+        System.out.println("isPublic : " + isPublic);
         try {
             String path = request.getSession().getServletContext().getRealPath(DEFAULT_UPLOAD_FILE_PATH);
             File f = new File(path);
@@ -111,11 +112,10 @@ public class FileController extends BaseController{
             fileInfo.setUpdateTime(System.currentTimeMillis());
             fileInfo.setFileSize(size);
             fileInfo.setDownloadCount(0);
-            fileInfo.setPublic(true);
+            fileInfo.setPublic(isPublic);
             fileInfo.setSaveName(saveName);
             fileInfo.setIdentifyCode(identifyCode);
             fileInfo.setOwner(user.getUsername());
-            fileInfo.setPublic(isPublic);
             fileDao.save(fileInfo);
             result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
             result.put("identifyCode", identifyCode);

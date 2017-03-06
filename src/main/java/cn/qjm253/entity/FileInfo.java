@@ -21,6 +21,7 @@ public class FileInfo {
     private long updateTime;
     private int downloadCount;
     private boolean isPublic;
+    @JsonIgnore
     private String saveName;        //包含了UUID码的文件名
     private String owner;
 

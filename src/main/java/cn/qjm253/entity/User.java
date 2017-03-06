@@ -35,9 +35,10 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, String avatar, String signature, int sex) {
+
+    public User(String username, String nickname, String avatar, String signature, int sex) {
         this.username = username;
-        this.password = password;
+        this.nickname = nickname;
         this.avatar = avatar;
         this.signature = signature;
         this.sex = sex;

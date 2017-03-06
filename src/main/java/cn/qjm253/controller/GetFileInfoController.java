@@ -25,7 +25,8 @@ import java.util.Map;
 @RequestMapping("/GetFileInfoAction")
 @Controller
 public class GetFileInfoController extends BaseController {
-    @RequestMapping(value = "/{identifyCode}", produces = "text/json;charset=UTF-8")
+
+    @RequestMapping(value = "/{identifyCode}", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public
     @ResponseBody
     String GetFileInfo(@PathVariable String identifyCode) {

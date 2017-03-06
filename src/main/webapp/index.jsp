@@ -14,6 +14,9 @@
     <a href="/GetFileInfoAction/sdfvse">test</a><br/>
     <a href="upload.jsp">上传文件测试</a><br/>
     <a href="registerTest.jsp">注册测试</a><br/>
-    <a href="loginTest.jsp">登录测试</a>
+    <a href="loginTest.jsp">登录测试</a><br/>
+    <a href="GetUserInfoTest.jsp">获取用户信息测试</a><br/>
+    <a href="/GetShareCenterAction">获取分享中心测试</a><br/>
+    <a href="uploadFileAfterLoginTest.jsp">登录后上传测试</a>
 </body>
 </html>
