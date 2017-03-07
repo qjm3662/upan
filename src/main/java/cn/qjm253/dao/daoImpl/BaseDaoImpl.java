@@ -12,6 +12,8 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,7 +23,8 @@ import java.util.List;
 @Transactional
 public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
     private Class<T> tClass;
-
+    @Resource(name = "sessionFactory")
+    private SessionFactory sessionFactory;
     /**
      * 保存对象到数据库
      *
@@ -29,44 +32,37 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
      * @return
      */
     public boolean save(T transientObject) {
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         try {
             session.saveOrUpdate(transientObject);
+            t.commit();
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
-            return false;
-        }finally {
             t.commit();
-            HibernateUtil.closeSession();
+            return false;
         }
     }
 
 
     public T get(PK id) {
-        Session session = HibernateUtil.currentSession();
-        Transaction transaction = session.beginTransaction();
+        Session session = sessionFactory.openSession();
         T t = session.get(tClass, id);
-        transaction.commit();
-        HibernateUtil.closeSession();
         return t;
     }
 
     public boolean update(String hql, String[] paramsName, Object... params) {
+        Session session = sessionFactory.openSession();
         try {
             if(params.length != paramsName.length){
                 return false;
             }
-            Session session = HibernateUtil.currentSession();
-            Transaction t = session.beginTransaction();
             Query query = session.createQuery(hql);
             for (int i = 0; i < paramsName.length; i++) {
                 query.setParameter(paramsName[i], params[i]);
             }
             int result = query.executeUpdate();     //返回持久层中被修改的实体数目
-            t.commit();
-            HibernateUtil.closeSession();
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -112,20 +108,16 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
     }
 
     public List query_(String hql, String[] paramsName, Object... params) throws Exception {
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         Query query = session.createQuery(hql);
         if(params.length != paramsName.length){
-            t.commit();
-            HibernateUtil.closeSession();
             return null;
         }
         for (int i = 0; i < params.length; i++) {
             query.setParameter(paramsName[i], params[i]);
         }
         List list = query.list();
-        t.commit();
-        HibernateUtil.closeSession();
         if (list.size() == 0) {
             return null;
         }

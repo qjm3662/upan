@@ -1,5 +1,6 @@
 package cn.qjm253.dao.daoImpl;
 
+import cn.qjm253.dao.UserDao;
 import cn.qjm253.entity.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @Repository(value = "userDaoImpl")
-public class UserDaoImpl extends BaseDaoImpl<User, Integer>{
+public class UserDaoImpl extends BaseDaoImpl<User, Integer> implements UserDao{
 
 }

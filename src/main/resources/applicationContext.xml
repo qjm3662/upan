@@ -4,32 +4,48 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!--<context:property-placeholder location="classpath:properties/jdbc.properties" ignore-unresolvable="true"/>-->
-    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">-->
-        <!--<property name="driverClass" value="${driverClass}"/>-->
-        <!--<property name="jdbcUrl" value="${jdbcUrl}"/>-->
-        <!--<property name="user" value="${user}"/>-->
-        <!--<property name="password" value="${password}"/>-->
-        <!--<property name="maxPoolSize" value="${maxPoolSize}"/>-->
-        <!--<property name="minPoolSize" value="${minPoolSize}"/>-->
-        <!--<property name="initialPoolSize" value="${initialPoolSize}"/>-->
-        <!--<property name="maxIdleTime" value="${maxIdleTime}"/>-->
-    <!--</bean>-->
+    <context:property-placeholder location="classpath:properties/jdbc.properties" ignore-unresolvable="true"/>
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="${driverClass}"/>
+        <property name="jdbcUrl" value="${jdbcUrl}"/>
+        <property name="user" value="${user}"/>
+        <property name="password" value="${password}"/>
+        <property name="maxPoolSize" value="${maxPoolSize}"/>
+        <property name="minPoolSize" value="${minPoolSize}"/>
+        <property name="initialPoolSize" value="${initialPoolSize}"/>
+        <property name="maxIdleTime" value="${maxIdleTime}"/>
+    </bean>
 
 
-    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
-        <!--<property name="dataSource" ref="dataSource"/>-->
-        <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
-        <!--<property name="hibernateProperties">-->
-            <!--<props>-->
-            <!--<prop key="current_session_context_class">thread</prop>-->
-            <!--<prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>-->
-            <!--<prop key="hbm2ddl.auto">update</prop>-->
-            <!--<prop key="show_sql">true</prop>-->
-            <!--<prop key="format_sql">true</prop>-->
-            <!--</props>-->
-        <!--</property>-->
-    <!--</bean>-->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="cn.qjm253.entity"/>
+        <property name="hibernateProperties">
+            <props>
+                <!--<prop key="current_session_context_class">thread</prop>-->
+                <prop key="dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hbm2ddl.auto">update</prop>
+                <prop key="show_sql">true</prop>
+                <prop key="format_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+    <!-- 配置Hibernate事务管理器 -->
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <!-- 配置事务异常封装 -->
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+    <!-- 事务增强 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!-- 事务属性定义 -->
+        <tx:attributes>
+            <tx:method name="*" />
+        </tx:attributes>
+    </tx:advice>
 
     <context:property-placeholder location="classpath:/properties/redis.properties" ignore-unresolvable="true"/>
 

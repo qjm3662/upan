@@ -1,5 +1,7 @@
 package cn.qjm253.controller;
 
+import cn.qjm253.dao.daoImpl.FileDaoImpl;
+import cn.qjm253.dao.UserDao;
 import cn.qjm253.dao.daoImpl.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class BaseController {
     @Autowired
-    protected UserDaoImpl userDao;
+    protected UserDao userDao;
     @Autowired
     protected FileDaoImpl fileDao;
     @Autowired

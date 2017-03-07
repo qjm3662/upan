@@ -25,8 +25,8 @@ public class MyTest {
 
     @Before
     public void init() {
-        session = HibernateUtil.currentSession();
-        t = session.beginTransaction();
+//        session = HibernateUtil.currentSession();
+//        t = session.beginTransaction();
     }
 //    @Test
 //    public void addUserInfo() {
@@ -88,9 +88,9 @@ public class MyTest {
 
     @After
     public void destroy() {
-        if (t != null) {
-            t.commit();
-        }
+//        if (t != null) {
+//            t.commit();
+//        }
 
     }
 }

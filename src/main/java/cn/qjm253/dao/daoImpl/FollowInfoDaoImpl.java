@@ -1,5 +1,6 @@
 package cn.qjm253.dao.daoImpl;
 
+import cn.qjm253.dao.FollowInfoDao;
 import cn.qjm253.entity.FileInfo;
 import cn.qjm253.entity.FollowInfo;
 import org.springframework.stereotype.Repository;
@@ -10,5 +11,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @Repository(value = "followInfoDaoImpl")
-public class FollowInfoDaoImpl extends BaseDaoImpl<FollowInfo, Integer>{
+public class FollowInfoDaoImpl extends BaseDaoImpl<FollowInfo, Integer> implements FollowInfoDao{
 }
