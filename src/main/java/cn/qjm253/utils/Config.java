@@ -8,4 +8,5 @@ public class Config {
     public static final String host = "http://123.207.96.66";
     public static final String post = "8080";
     public static final String url = host + ":" + post;
+    public static final String test = "test";
 }
