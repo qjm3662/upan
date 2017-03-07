@@ -27,10 +27,12 @@ public interface BaseDao<T, PK extends Serializable> {
 
     /**
      * save change made to a persist object
-     *
-     * @param transientObject
+     * @param hql
+     * @param paramsName
+     * @param params
+     * @return
      */
-    boolean update(T transientObject);
+    boolean update(String hql, String[] paramsName, Object... params);
 
     /**
      * Remove an object form persistent storage in the database

@@ -30,35 +30,35 @@ public class MyTest {
     }
 //    @Test
 //    public void addUserInfo() {
-//        FileInfo f1 = new FileInfo("《你还好吗》1", "1024", "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
-//        FileInfo f2 = new FileInfo("《你还好吗》2", "1024", "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
-//        FileInfo f3 = new FileInfo("《你还好吗》3", "1024", "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
+////        FileInfo f1 = new FileInfo("《你还好吗》1", "1024", "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
+////        FileInfo f2 = new FileInfo("《你还好吗》2", "1024", "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
+////        FileInfo f3 = new FileInfo("《你还好吗》3", "1024", "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
 //
-//        Set<FileInfo> fs = new HashSet<FileInfo>();
-//        fs.add(f1);
-//        fs.add(f2);
-//        fs.add(f3);
+////        Set<FileInfo> fs = new HashSet<FileInfo>();
+////        fs.add(f1);
+////        fs.add(f2);
+////        fs.add(f3);
 //
 //        User u1 = new User("Robbin1", "123456", "null", "The better day", 1);
 //        User u2 = new User("Robbin2", "123456", "null", "The better day", 1);
 //        User u3 = new User("Robbin3", "123456", "null", "The better day", 1);
 //
-//        Set<User> us = new HashSet<User>();
-//        us.add(u2);
-//        us.add(u3);
-//        FollowInfo followInfo = new FollowInfo();
-//        followInfo.setFollowing(us);
-//
-//        u1.setShares(fs);
-//        u1.setFollowInfo(followInfo);
-//
-//        session.save(f1);
-//        session.save(f2);
-//        session.save(f3);
+////        Set<User> us = new HashSet<User>();
+////        us.add(u2);
+////        us.add(u3);
+////        FollowInfo followInfo = new FollowInfo();
+////        followInfo.setFollowing(us);
+////
+////        u1.setShares(fs);
+////        u1.setFollowInfo(followInfo);
+////
+////        session.save(f1);
+////        session.save(f2);
+////        session.save(f3);
 //
 //        session.save(u2);
 //        session.save(u3);
-//        session.save(followInfo);
+////        session.save(followInfo);
 //        session.save(u1);
 //    }
 
@@ -80,11 +80,10 @@ public class MyTest {
 
     @Test
     public void test(){
-        String s = "dsaffasdg";
-        System.out.println(Base64.encodeToString(s.getBytes()));
-        System.out.println(Base64.encodeToString(s.getBytes()));
-        System.out.println(Base64.encodeToString(s.getBytes()));
-        System.out.println(Base64.encodeToString(s.getBytes()));
+        FollowInfo followInfo = session.get(FollowInfo.class, 4);
+        User user = followInfo.getOther();
+        System.out.println(followInfo.toString());
+        System.out.println(user.toString());
     }
 
     @After

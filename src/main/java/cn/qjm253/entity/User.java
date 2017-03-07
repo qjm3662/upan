@@ -22,9 +22,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")
     private Set<FileInfo> shares = new HashSet<FileInfo>();
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "fi_id")
-    private FollowInfo followInfo;
+//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    @JoinColumn(name = "fi_id")
+//    private FollowInfo followInfo;
 
 
     public User() {
@@ -52,13 +52,13 @@ public class User {
         this.nickname = nickname;
     }
 
-    public FollowInfo getFollowInfo() {
-        return followInfo;
-    }
-
-    public void setFollowInfo(FollowInfo followInfo) {
-        this.followInfo = followInfo;
-    }
+//    public FollowInfo getFollowInfo() {
+//        return followInfo;
+//    }
+//
+//    public void setFollowInfo(FollowInfo followInfo) {
+//        this.followInfo = followInfo;
+//    }
 
     public Set<FileInfo> getShares() {
         return shares;
@@ -126,7 +126,7 @@ public class User {
                 ", signature='" + signature + '\'' +
                 ", sex=" + sex +
                 ", shares=" + shares +
-                ", followInfo=" + followInfo +
+//                ", followInfo=" + followInfo +
                 '}';
     }
 }

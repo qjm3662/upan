@@ -1,9 +1,6 @@
 package cn.qjm253.controller;
 
-import cn.qjm253.dao.daoImpl.Auth;
-import cn.qjm253.dao.daoImpl.FeedBackDaoImpl;
-import cn.qjm253.dao.daoImpl.FileDaoImpl;
-import cn.qjm253.dao.daoImpl.UserDaoImpl;
+import cn.qjm253.dao.daoImpl.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,8 @@ public class BaseController {
     protected FileDaoImpl fileDao;
     @Autowired
     protected FeedBackDaoImpl feedBackDao;
+    @Autowired
+    protected FollowInfoDaoImpl followInfoDao;
     @Autowired
     protected Auth auth;
 

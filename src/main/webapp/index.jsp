@@ -17,6 +17,14 @@
     <a href="loginTest.jsp">登录测试</a><br/>
     <a href="GetUserInfoTest.jsp">获取用户信息测试</a><br/>
     <a href="/GetShareCenterAction">获取分享中心测试</a><br/>
-    <a href="uploadFileAfterLoginTest.jsp">登录后上传测试</a>
+    <a href="uploadFileAfterLoginTest.jsp">登录后上传测试</a><br/>
+    <a href="ModifyUserInfoTest.jsp">修改用户信息测试</a><br/>
+    <a href="FollowTest.jsp">关注测试</a><br/>
+    <a href="UnFollowTest.jsp">取消关注测试</a><br/>
+    <a href="/user/followInfo">获取用户关注的人</a><br/>
+    <a href="RevisePSDTest.jsp">修改用户密码测试</a><br/>
+    <a href="feedbackTest.jsp">修改用户密码测试</a><br/>
+    <a href="modifyUserAvatarTest.jsp">用户修改头像测试</a><br/>
+
 </body>
 </html>

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by Administrator on 2017/3/3/003.
+ * Created by Administrator on 2017/3/6 0006.
  */
 @Transactional
-@Repository(value = "fileDaoImpl")
-public class FileDaoImpl extends BaseDaoImpl<FileInfo, Integer>{
+@Repository(value = "followInfoDaoImpl")
+public class FollowInfoDaoImpl extends BaseDaoImpl<FollowInfo, Integer>{
 }

@@ -32,7 +32,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         Session session = HibernateUtil.currentSession();
         Transaction t = session.beginTransaction();
         try {
-            session.save(transientObject);
+            session.saveOrUpdate(transientObject);
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -53,9 +53,20 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         return t;
     }
 
-    public boolean update(T transientObject) {
+    public boolean update(String hql, String[] paramsName, Object... params) {
         try {
+            if(params.length != paramsName.length){
+                return false;
+            }
             Session session = HibernateUtil.currentSession();
+            Transaction t = session.beginTransaction();
+            Query query = session.createQuery(hql);
+            for (int i = 0; i < paramsName.length; i++) {
+                query.setParameter(paramsName[i], params[i]);
+            }
+            int result = query.executeUpdate();     //返回持久层中被修改的实体数目
+            t.commit();
+            HibernateUtil.closeSession();
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -64,14 +75,18 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
     }
 
     public boolean delete(T persistObject) {
-        try {
+        return false;
+    }
 
+    public boolean delete(String hql, String[] paramsName, Object... params) {
+        try {
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
     public T query(String hql, String[] paramsName, Object... params) {
         try {

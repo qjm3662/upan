@@ -12,28 +12,9 @@ public class FeedBack {
     private int fb_id;
     private String text;
     private String username;
-    @Transient
-    private int code;
-    @Transient
-    private String codeMSG;
+    private String phoneNumber;
 
     public FeedBack() {
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getCodeMSG() {
-        return codeMSG;
-    }
-
-    public void setCodeMSG(String codeMSG) {
-        this.codeMSG = codeMSG;
     }
 
     public int getFb_id() {
@@ -61,5 +42,11 @@ public class FeedBack {
         this.username = username;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
