@@ -19,12 +19,10 @@ public class User {
     private String avatar;
     private String signature;
     private int sex;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid")
+    @OneToMany(cascade = CascadeType.MERGE, targetEntity = FileInfo.class, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<FileInfo> shares = new HashSet<FileInfo>();
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @JoinColumn(name = "fi_id")
-//    private FollowInfo followInfo;
+    @OneToOne(mappedBy = "other")
+    private FollowInfo followInfo;
 
 
     public User() {
@@ -114,6 +112,15 @@ public class User {
 
     public void setSex(int sex) {
         this.sex = sex;
+
+    }
+
+    public FollowInfo getFollowInfo() {
+        return followInfo;
+    }
+
+    public void setFollowInfo(FollowInfo followInfo) {
+        this.followInfo = followInfo;
     }
 
     @Override

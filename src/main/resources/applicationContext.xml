@@ -52,6 +52,7 @@
     <!-- 引入同文件夹下的redis属性配置文件 -->
     <import resource="redis.xml"/>
 
+
     <!-- 支持上传文件 -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 </beans>

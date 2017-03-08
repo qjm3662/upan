@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.Buffer;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,27 +33,54 @@ public class FileController extends BaseController {
 
     /**
      * 头像下载
-     *
-     * @param fileName
+     * @param response
      * @param request
-     * @return
      */
     @RequestMapping(value = "/download", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadAvatar(@RequestParam String fileName,
+    public void downloadAvatar(@RequestParam String fileName,  HttpServletResponse response,
                                                  HttpServletRequest request) {
-        HttpHeaders headers = new HttpHeaders();
-        //检查文件名中非法字符，只允许是字母、数字和下划线
-        try {
-            headers.setContentDispositionFormData("myfile", fileName);
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            // 获取物理路径
-            String path = request.getSession().getServletContext().getRealPath(DEFAULT_PATH);
-            File pic = new File(path, fileName);
-            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(pic), headers, HttpStatus.CREATED);
-        } catch (Exception e) {
-            e.printStackTrace();
+        //获取头像的保存，目录
+        String dataDirectory = request.getServletContext().getRealPath(DEFAULT_PATH);
+        File file = new File(dataDirectory, fileName);
+        if(file.exists()){
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                response.addHeader("Content-Disposition", "attachment; filename="
+                        + URLEncoder.encode(file.getName(), "utf-8"));
+                byte[] buffer = new byte[1024];
+
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while(i != -1){     //直至把文件全部读出来
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                if(bis != null){
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(fis != null){
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
-        return null;
     }
 
     /**
@@ -61,28 +91,55 @@ public class FileController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/download/{identifyCode}", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String identifyCode, HttpServletRequest request) {
+    public void downloadFile(@PathVariable String identifyCode, HttpServletResponse response, HttpServletRequest request) {
         String[] params = {"identifyCode"};
         String hql = "from FileInfo f";
         hql = createHql(hql, "f", params);
         FileInfo fileInfo = fileDao.query(hql, params, identifyCode);
         if (fileInfo == null) {       //要下载的文件不存在（或者是提取码错误）
-            return null;
+            return ;
         }
-        HttpHeaders headers = new HttpHeaders();
-        //检查文件名中非法字符，只允许是字母、数字和下划线
-        try {
-            //一定要设置编码方式，不然下载下来的文件名会出现乱码
-            headers.setContentDispositionFormData("myfile", fileInfo.getFileName(), Charset.forName("UTF-8"));
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            // 获取物理路径
-            String path = request.getSession().getServletContext().getRealPath(DEFAULT_UPLOAD_FILE_PATH);
-            File pic = new File(path, fileInfo.getSaveName());
-            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(pic), headers, HttpStatus.CREATED);
-        } catch (Exception e) {
-            e.printStackTrace();
+        //获取头像的保存，目录
+        String dataDirectory = request.getServletContext().getRealPath(DEFAULT_UPLOAD_FILE_PATH);
+        File file = new File(dataDirectory, fileInfo.getSaveName());
+        if(file.exists()){      //如果文件存在则允许下载
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                response.addHeader("Content-Disposition", "attachment; filename="
+                        + URLEncoder.encode(fileInfo.getFileName(), "utf-8"));
+                byte[] buffer = new byte[1024];
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while(i != -1){
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                if(bis != null){
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(fis != null){
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
-        return null;
     }
 
     /**

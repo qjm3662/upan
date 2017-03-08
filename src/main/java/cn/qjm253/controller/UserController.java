@@ -6,6 +6,9 @@ import cn.qjm253.entity.User;
 import cn.qjm253.utils.CodeMSG;
 import cn.qjm253.utils.Config;
 import org.apache.shiro.codec.Base64;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,7 +90,7 @@ public class UserController extends BaseController {
     public
     @ResponseBody
     Map<String, Object> login(@RequestParam String username, @RequestParam String password,
-                              HttpServletResponse response) {
+                              HttpServletResponse response, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<String, Object>();
         if (username.equals("") || password.equals("")) {
             result.put(CodeMSG.CODE, CodeMSG.USERNAME_NOT_EXISTS);
@@ -104,7 +107,7 @@ public class UserController extends BaseController {
             result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.USERNAME_NOT_EXISTS));
         } else {
             if (u.getPassword().equals(base64Pwd)) {
-                auth.login(response, gson.toJson(u));
+                auth.login(request, response, gson.toJson(u));
                 result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
             } else {
                 result.put(CodeMSG.CODE, CodeMSG.PASSWORD_ERROR);
@@ -159,6 +162,7 @@ public class UserController extends BaseController {
     public
     @ResponseBody
     Map<String, Object> followSb(@RequestParam String targetUsername, HttpServletRequest request) {
+        System.out.println("what");
         Map<String, Object> result = new HashMap<String, Object>();
         if (targetUsername == null || targetUsername.equals("")) {
             result.put(CodeMSG.CODE, CodeMSG.FAIL);
@@ -173,23 +177,25 @@ public class UserController extends BaseController {
         String[] params = {"username"};
         String hql = "from User u";
         hql = createHql(hql, "u", params);
+        Session session = followInfoDao.getSessionFactory().openSession();
+        Transaction t = session.beginTransaction();
+
+        Query query = session.createQuery(hql);
+        List list = query.list();
         User other = userDao.query(hql, params, targetUsername);
         if (other == null) {      //要关注的对象不存在
             result.put(CodeMSG.CODE, CodeMSG.USERNAME_NOT_EXISTS);
             result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.USERNAME_NOT_EXISTS));
             return result;
         }
+        session.persist(other);
         FollowInfo followInfo = new FollowInfo();
         followInfo.setMyselfName(user.getUsername());
         followInfo.setOtherName(targetUsername);
         followInfo.setOther(other);
         followInfo.setCreateTime(System.currentTimeMillis());
-        if (!followInfoDao.save(followInfo)) {      //保存关注信息失败
-            result.put(CodeMSG.CODE, CodeMSG.FAIL);
-            result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.FAIL));
-        } else {
             result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
-        }
+        t.commit();
         return result;
     }
 
@@ -305,6 +311,13 @@ public class UserController extends BaseController {
         return result;
     }
 
+    /**
+     * 用户反馈
+     * @param request
+     * @param text
+     * @param phoneNumber
+     * @return
+     */
     @RequestMapping(value = "/feedback", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public @ResponseBody Map<String, Object> feedBack(HttpServletRequest request, @RequestParam String text,
                                                       @RequestParam String phoneNumber){

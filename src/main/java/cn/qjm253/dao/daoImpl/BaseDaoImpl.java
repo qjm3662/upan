@@ -35,7 +35,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         try {
-            session.saveOrUpdate(transientObject);
+            session.save(transientObject);
             t.commit();
             return true;
         } catch (DataAccessException e) {
@@ -54,8 +54,10 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
 
     public boolean update(String hql, String[] paramsName, Object... params) {
         Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
         try {
             if(params.length != paramsName.length){
+                t.commit();
                 return false;
             }
             Query query = session.createQuery(hql);
@@ -63,9 +65,11 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
                 query.setParameter(paramsName[i], params[i]);
             }
             int result = query.executeUpdate();     //返回持久层中被修改的实体数目
+            t.commit();
             return true;
         } catch (DataAccessException e) {
             e.printStackTrace();
+            t.commit();
             return false;
         }
     }
@@ -97,6 +101,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         }
     }
 
+
     public List<T> queryAll(String hql, String[] paramsName, Object... params) {
         try {
             List<T> list = query_(hql, paramsName, params);
@@ -112,16 +117,21 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         Transaction t = session.beginTransaction();
         Query query = session.createQuery(hql);
         if(params.length != paramsName.length){
+            t.commit();
             return null;
         }
         for (int i = 0; i < params.length; i++) {
             query.setParameter(paramsName[i], params[i]);
         }
         List list = query.list();
+        t.commit();
         if (list.size() == 0) {
             return null;
         }
         return list;
     }
 
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
 }

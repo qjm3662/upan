@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -19,8 +20,8 @@ import java.net.URLEncoder;
  */
 @Repository("auth")
 public class Auth {
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+//    @Autowired
+//    private RedisTemplate<String, String> redisTemplate;
     private Gson gson = new Gson();
 
     /**
@@ -28,7 +29,7 @@ public class Auth {
      * @param response
      * @param value
      */
-    public void login(HttpServletResponse response, String value){
+    public void login(HttpServletRequest request, HttpServletResponse response, String value){
         String cookieName = "#" + System.currentTimeMillis() + "#";
         try {
             cookieName = URLEncoder.encode(cookieName, "UTF-8");
@@ -39,7 +40,9 @@ public class Auth {
         Cookie cookie = new Cookie(Config.cookieName, cookieName);
         cookie.setMaxAge(60 * 60 * 24);
         response.addCookie(cookie);
-        redisTemplate.opsForValue().set(cookieName, value);
+        HttpSession session = request.getSession();
+        session.setAttribute(cookieName, value);
+//        redisTemplate.opsForValue().set(cookieName, value);
     }
 
 
@@ -54,7 +57,9 @@ public class Auth {
             return null;
         }
         String cookieName = cookies[0].getValue();
-        String value = redisTemplate.opsForValue().get(cookieName);
+        HttpSession session = request.getSession();
+        String value = (String) session.getAttribute(cookieName);
+//        String value = redisTemplate.opsForValue().get(cookieName);
         if(value == null){
             return null;
         }

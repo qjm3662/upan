@@ -24,6 +24,8 @@ public class FileInfo {
     @JsonIgnore
     private String saveName;        //包含了UUID码的文件名
     private String owner;
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    private User owner_user;
 
     public FileInfo() {
     }
@@ -127,5 +129,13 @@ public class FileInfo {
     public void setSaveName(String saveName) {
 
         this.saveName = saveName;
+    }
+
+    public User getOwner_user() {
+        return owner_user;
+    }
+
+    public void setOwner_user(User owner_user) {
+        this.owner_user = owner_user;
     }
 }

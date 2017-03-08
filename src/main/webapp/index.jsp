@@ -23,7 +23,7 @@
     <a href="UnFollowTest.jsp">取消关注测试</a><br/>
     <a href="/user/followInfo">获取用户关注的人</a><br/>
     <a href="RevisePSDTest.jsp">修改用户密码测试</a><br/>
-    <a href="feedbackTest.jsp">修改用户密码测试</a><br/>
+    <a href="feedbackTest.jsp">用户反馈测试</a><br/>
     <a href="modifyUserAvatarTest.jsp">用户修改头像测试</a><br/>
 
 </body>

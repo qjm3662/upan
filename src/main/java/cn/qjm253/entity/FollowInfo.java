@@ -15,7 +15,7 @@ public class FollowInfo {
     private int fi_id;
     private String myselfName;
     private String otherName;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "uid")
     @JsonIgnore
     private User other;
@@ -25,9 +25,6 @@ public class FollowInfo {
     private int sex;
     @Transient
     private String avatar;
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "fi_id")
-//    private Set<User> following;
 
     public FollowInfo() {
     }
