@@ -1,11 +1,13 @@
 package cn.qjm253.controller;
 
 import cn.qjm253.entity.FileInfo;
+import cn.qjm253.entity.SimpleUserInfo;
 import cn.qjm253.entity.User;
 import cn.qjm253.utils.CodeMSG;
 import cn.qjm253.utils.HibernateUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.hibernate.NonUniqueObjectException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,9 @@ public class GetFileInfoController extends BaseController {
         String hql = "from FileInfo f";
         hql = createHql(hql, "f", params);
         FileInfo fileInfo = fileDao.query(hql, params, identifyCode);
+        if(fileInfo != null && fileInfo.getOwner_user() != null){       //如果该文件是确有用户上传，就把用户的信息一并设置进去返回给客户端
+            fileInfo.setOwner(new SimpleUserInfo(fileInfo.getOwner_user()));
+        }
         return gson.toJson(fileInfo, FileInfo.class);
     }
 }

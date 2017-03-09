@@ -5,11 +5,6 @@ import cn.qjm253.entity.User;
 import cn.qjm253.utils.CodeMSG;
 import cn.qjm253.utils.Config;
 import cn.qjm253.utils.UUIDUtil;
-import org.apache.commons.io.FileUtils;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -18,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
-import java.nio.Buffer;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -208,6 +201,7 @@ public class FileController extends BaseController {
         if (user == null) {
             return upload(file, request);
         }
+        user = userDao.get(User.class, user.getUid());      //通过Id再从数据库中获取user对象，获取到的应该是持久化对象
         System.out.println("isPublic : " + isPublic);
         try {
             String path = request.getSession().getServletContext().getRealPath(DEFAULT_UPLOAD_FILE_PATH);
@@ -226,7 +220,7 @@ public class FileController extends BaseController {
             fileInfo.setPublic(isPublic);
             fileInfo.setSaveName(saveName);
             fileInfo.setIdentifyCode(identifyCode);
-            fileInfo.setOwner(user.getUsername());
+            fileInfo.setOwner_user(user);
             fileDao.save(fileInfo);
             result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
             result.put("identifyCode", identifyCode);

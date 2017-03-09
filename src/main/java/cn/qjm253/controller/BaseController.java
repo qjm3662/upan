@@ -3,6 +3,7 @@ package cn.qjm253.controller;
 import cn.qjm253.dao.daoImpl.FileDaoImpl;
 import cn.qjm253.dao.UserDao;
 import cn.qjm253.dao.daoImpl.*;
+import cn.qjm253.utils.MyExclusionStrategy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,9 @@ public class BaseController {
     protected FollowInfoDaoImpl followInfoDao;
     @Autowired
     protected Auth auth;
-
-    public static Gson gson = new GsonBuilder().serializeNulls().create();
+    @Autowired
+    protected Gson gson;
+//    public static Gson gson = new GsonBuilder().setExclusionStrategies(new MyExclusionStrategy()).serializeNulls().create();
 
     public String createHql(String hql, String objectName, String[] paramsName){
         if(paramsName.length == 0){

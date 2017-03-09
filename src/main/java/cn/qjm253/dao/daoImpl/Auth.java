@@ -22,7 +22,8 @@ import java.net.URLEncoder;
 public class Auth {
 //    @Autowired
 //    private RedisTemplate<String, String> redisTemplate;
-    private Gson gson = new Gson();
+    @Autowired
+    private Gson gson;
 
     /**
      * 登录函数

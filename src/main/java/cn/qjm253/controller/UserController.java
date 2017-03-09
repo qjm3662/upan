@@ -2,6 +2,7 @@ package cn.qjm253.controller;
 
 import cn.qjm253.entity.FeedBack;
 import cn.qjm253.entity.FollowInfo;
+import cn.qjm253.entity.SimpleUserInfo;
 import cn.qjm253.entity.User;
 import cn.qjm253.utils.CodeMSG;
 import cn.qjm253.utils.Config;
@@ -97,7 +98,7 @@ public class UserController extends BaseController {
             result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.USERNAME_NOT_EXISTS));
             return result;
         }
-        String hql = "select new User(username, password) from User u";
+        String hql = "select new User(uid, username, password) from User u";
         String[] params = {"username"};
         String base64Pwd = Base64.encodeToString(password.getBytes());
         hql = createHql(hql, "u", params);
@@ -177,25 +178,22 @@ public class UserController extends BaseController {
         String[] params = {"username"};
         String hql = "from User u";
         hql = createHql(hql, "u", params);
-        Session session = followInfoDao.getSessionFactory().openSession();
-        Transaction t = session.beginTransaction();
-
-        Query query = session.createQuery(hql);
-        List list = query.list();
         User other = userDao.query(hql, params, targetUsername);
         if (other == null) {      //要关注的对象不存在
             result.put(CodeMSG.CODE, CodeMSG.USERNAME_NOT_EXISTS);
             result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.USERNAME_NOT_EXISTS));
             return result;
         }
-        session.persist(other);
         FollowInfo followInfo = new FollowInfo();
         followInfo.setMyselfName(user.getUsername());
-        followInfo.setOtherName(targetUsername);
         followInfo.setOther(other);
+        followInfo.setOtherName(other.getUsername());
         followInfo.setCreateTime(System.currentTimeMillis());
-            result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
-        t.commit();
+        if(!followInfoDao.save(followInfo)){
+            result.put(CodeMSG.CODE, CodeMSG.FAIL);
+            result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.FAIL));
+        }
+        result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
         return result;
     }
 
@@ -258,8 +256,7 @@ public class UserController extends BaseController {
                 result.put("followings", null);
             } else {
                 for (FollowInfo f : list) {
-                    f.setSex(f.getOther().getSex());
-                    f.setAvatar(f.getOther().getAvatar());
+                    f.setSimpleUserInfo(new SimpleUserInfo(f.getOther()));
                 }
                 result.put("followings", list);
             }
@@ -269,6 +266,7 @@ public class UserController extends BaseController {
 
     /**
      * 修改密码
+     *
      * @param request
      * @param oldPassword
      * @param newPassword
@@ -290,6 +288,7 @@ public class UserController extends BaseController {
             result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.NOT_LOGIN_OR_LOGIN_INVALID));
             return result;
         }
+        user = userDao.get(User.class, user.getUid());
         try {
             newPassword = URLEncoder.encode(newPassword, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -313,14 +312,17 @@ public class UserController extends BaseController {
 
     /**
      * 用户反馈
+     *
      * @param request
      * @param text
      * @param phoneNumber
      * @return
      */
     @RequestMapping(value = "/feedback", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
-    public @ResponseBody Map<String, Object> feedBack(HttpServletRequest request, @RequestParam String text,
-                                                      @RequestParam String phoneNumber){
+    public
+    @ResponseBody
+    Map<String, Object> feedBack(HttpServletRequest request, @RequestParam String text,
+                                 @RequestParam String phoneNumber) {
         Map<String, Object> result = new HashMap<String, Object>();
         User user = auth.getUser(request);
         if (user == null) {       //未登录或者登录失效
@@ -332,9 +334,9 @@ public class UserController extends BaseController {
         feedBack.setPhoneNumber(phoneNumber);
         feedBack.setText(text);
         feedBack.setUsername(user.getUsername());
-        if(feedBackDao.save(feedBack)){
+        if (feedBackDao.save(feedBack)) {
             result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
-        }else{
+        } else {
             result.put(CodeMSG.CODE, CodeMSG.FAIL);
         }
         return result;

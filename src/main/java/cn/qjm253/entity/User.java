@@ -1,5 +1,7 @@
 package cn.qjm253.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.annotation.Generated;
 import javax.persistence.*;
 import java.util.HashSet;
@@ -14,21 +16,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)     //主键自增
     private int uid;
     private String username;
+    @JsonIgnore
     private String password;
     private String nickname;
     private String avatar;
     private String signature;
     private int sex;
-    @OneToMany(cascade = CascadeType.MERGE, targetEntity = FileInfo.class, orphanRemoval = true, fetch = FetchType.LAZY)
+
+    @OneToMany(mappedBy = "owner_user", fetch = FetchType.LAZY)
     private Set<FileInfo> shares = new HashSet<FileInfo>();
-    @OneToOne(mappedBy = "other")
+
+    @OneToOne(mappedBy = "other", fetch = FetchType.LAZY)
     private FollowInfo followInfo;
 
 
     public User() {
     }
 
-    public User(String username, String password) {
+    public User(int uid, String username, String password) {
+        this.uid = uid;
         this.username = username;
         this.password = password;
     }
@@ -50,13 +56,13 @@ public class User {
         this.nickname = nickname;
     }
 
-//    public FollowInfo getFollowInfo() {
-//        return followInfo;
-//    }
-//
-//    public void setFollowInfo(FollowInfo followInfo) {
-//        this.followInfo = followInfo;
-//    }
+    public FollowInfo getFollowInfo() {
+        return followInfo;
+    }
+
+    public void setFollowInfo(FollowInfo followInfo) {
+        this.followInfo = followInfo;
+    }
 
     public Set<FileInfo> getShares() {
         return shares;
@@ -115,13 +121,13 @@ public class User {
 
     }
 
-    public FollowInfo getFollowInfo() {
-        return followInfo;
-    }
-
-    public void setFollowInfo(FollowInfo followInfo) {
-        this.followInfo = followInfo;
-    }
+//    public FollowInfo getFollowInfo() {
+//        return followInfo;
+//    }
+//
+//    public void setFollowInfo(FollowInfo followInfo) {
+//        this.followInfo = followInfo;
+//    }
 
     @Override
     public String toString() {

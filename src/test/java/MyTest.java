@@ -1,7 +1,11 @@
 import cn.qjm253.entity.FileInfo;
 import cn.qjm253.entity.FollowInfo;
+import cn.qjm253.entity.SimpleUserInfo;
 import cn.qjm253.entity.User;
 import cn.qjm253.utils.HibernateUtil;
+import cn.qjm253.utils.MyExclusionStrategy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.shiro.codec.Base64;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -22,7 +26,9 @@ import java.util.Set;
 public class MyTest {
 
     private Session session;
-    Transaction t;
+    private Transaction t;
+    // 必须使用excludeFieldsWithoutExposeAnnotation
+    private Gson gson = new GsonBuilder().setExclusionStrategies(new MyExclusionStrategy()).create();
 
     @Before
     public void init() {
@@ -66,11 +72,31 @@ public class MyTest {
 
     @Test
     public void queryUserInfo() {
+//        User user = session.get(User.class, 1);
+//        System.out.println(gson.toJson(user));
+//        FileInfo fileInfo = session.get(FileInfo.class, 2);
+//        System.out.println(gson.toJson(fileInfo));
+        FollowInfo followInfo = session.get(FollowInfo.class, 8);
+        followInfo.setSimpleUserInfo(new SimpleUserInfo(followInfo.getOther()));
+        System.out.println(gson.toJson(followInfo));
+        session.save(followInfo);
     }
 
     @Test
-    public void test(){
-    }
+//    public void testSave(){
+////        FileInfo f1 = new FileInfo("《你还好吗》1", 1024, "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
+////        FileInfo f2 = new FileInfo("《你还好吗》2", 1024, "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
+////        FileInfo f3 = new FileInfo("《你还好吗》3", 1024, "sdfvse", System.currentTimeMillis(), System.currentTimeMillis(), 1, true, "ada");
+//
+//        User user = new User("123456789", "123456", "dsaf", "asdfas", 1);
+//        User u = session.get(User.class, 1);
+//        FollowInfo followInfo = new FollowInfo();
+//        followInfo.setCreateTime(System.currentTimeMillis());
+//        followInfo.setMyselfName(user.getUsername());
+//        followInfo.setOther(u);
+//        session.save(user);
+//        session.save(followInfo);
+//    }
 
     @After
     public void destroy() {

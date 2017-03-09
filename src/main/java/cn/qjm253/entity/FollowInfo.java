@@ -20,11 +20,8 @@ public class FollowInfo {
     @JsonIgnore
     private User other;
     private long createTime;
-
     @Transient
-    private int sex;
-    @Transient
-    private String avatar;
+    private SimpleUserInfo simpleUserInfo;
 
     public FollowInfo() {
     }
@@ -61,6 +58,14 @@ public class FollowInfo {
         this.fi_id = fi_id;
     }
 
+    public SimpleUserInfo getSimpleUserInfo() {
+        return simpleUserInfo;
+    }
+
+    public void setSimpleUserInfo(SimpleUserInfo simpleUserInfo) {
+        this.simpleUserInfo = simpleUserInfo;
+    }
+
     public String getOtherName() {
         return otherName;
     }
@@ -69,28 +74,11 @@ public class FollowInfo {
         this.otherName = otherName;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
-    }
-
     @Override
     public String toString() {
         return "FollowInfo{" +
                 "fi_id=" + fi_id +
                 ", myselfName='" + myselfName + '\'' +
-                ", otherName='" + otherName + '\'' +
                 ", other=" + other +
                 ", createTime=" + createTime +
                 '}';

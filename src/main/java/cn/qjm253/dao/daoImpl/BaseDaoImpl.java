@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Transactional
 public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
-    private Class<T> tClass;
+    protected Class<T> tClass;
     @Resource(name = "sessionFactory")
     private SessionFactory sessionFactory;
     /**
@@ -35,7 +35,7 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
         Session session = sessionFactory.openSession();
         Transaction t = session.beginTransaction();
         try {
-            session.save(transientObject);
+            session.saveOrUpdate(session.merge(transientObject));
             t.commit();
             return true;
         } catch (DataAccessException e) {
@@ -46,10 +46,9 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
     }
 
 
-    public T get(PK id) {
+    public T get(Class<T> myClass, PK id) {
         Session session = sessionFactory.openSession();
-        T t = session.get(tClass, id);
-        return t;
+        return session.get(myClass, id);
     }
 
     public boolean update(String hql, String[] paramsName, Object... params) {
@@ -114,17 +113,14 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
 
     public List query_(String hql, String[] paramsName, Object... params) throws Exception {
         Session session = sessionFactory.openSession();
-        Transaction t = session.beginTransaction();
         Query query = session.createQuery(hql);
         if(params.length != paramsName.length){
-            t.commit();
             return null;
         }
         for (int i = 0; i < params.length; i++) {
             query.setParameter(paramsName[i], params[i]);
         }
         List list = query.list();
-        t.commit();
         if (list.size() == 0) {
             return null;
         }

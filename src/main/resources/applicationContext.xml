@@ -55,4 +55,13 @@
 
     <!-- 支持上传文件 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
+
+    <!--Gson的字段忽略策略-->
+    <bean id="myExclusionStrategy" class="cn.qjm253.utils.MyExclusionStrategy"/>
+    <!--Gson构建工厂-->
+    <bean id="gsonBuilder" class="com.google.gson.GsonBuilder">
+        <property name="exclusionStrategies" ref="myExclusionStrategy"/>
+    </bean>
+    <!--Gson-->
+    <bean id="gson" class="com.google.gson.Gson" factory-bean="gsonBuilder" factory-method="create"/>
 </beans>

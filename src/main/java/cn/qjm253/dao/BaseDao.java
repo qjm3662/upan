@@ -22,7 +22,7 @@ public interface BaseDao<T, PK extends Serializable> {
      * @param id
      * @return
      */
-    T get(PK id);
+    T get(Class<T> myClass, PK id);
 
 
     /**

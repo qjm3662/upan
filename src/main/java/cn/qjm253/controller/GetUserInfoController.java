@@ -28,7 +28,7 @@ public class GetUserInfoController extends BaseController {
             return result;
         }
         String[] params = {"username"};
-        String hql = "select new User(username, nickname, avatar, signature, sex) from User u";
+        String hql = "from User u";
         hql = createHql(hql, "u", params);
         User user = userDao.query(hql, params, username);
         if(user != null){

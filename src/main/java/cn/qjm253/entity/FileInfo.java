@@ -23,8 +23,11 @@ public class FileInfo {
     private boolean isPublic;
     @JsonIgnore
     private String saveName;        //包含了UUID码的文件名
-    private String owner;
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @Transient      //改属性不在数据库中出现，只是为了返回给用户的时候加入json串中
+    private SimpleUserInfo owner;   //用来存储用户信息
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private User owner_user;
 
     public FileInfo() {
@@ -50,20 +53,20 @@ public class FileInfo {
         this.updateTime = updateTime;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     public int getFid() {
         return fid;
     }
 
     public void setFid(int fid) {
         this.fid = fid;
+    }
+
+    public SimpleUserInfo getOwner() {
+        return owner;
+    }
+
+    public void setOwner(SimpleUserInfo owner) {
+        this.owner = owner;
     }
 
     public String getFileName() {
@@ -137,5 +140,47 @@ public class FileInfo {
 
     public void setOwner_user(User owner_user) {
         this.owner_user = owner_user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FileInfo)) return false;
+
+        FileInfo fileInfo = (FileInfo) o;
+
+        if (getFid() != fileInfo.getFid()) return false;
+        if (Double.compare(fileInfo.getFileSize(), getFileSize()) != 0) return false;
+        if (getCreateTime() != fileInfo.getCreateTime()) return false;
+        if (getUpdateTime() != fileInfo.getUpdateTime()) return false;
+        if (getDownloadCount() != fileInfo.getDownloadCount()) return false;
+        if (isPublic() != fileInfo.isPublic()) return false;
+        if (getFileName() != null ? !getFileName().equals(fileInfo.getFileName()) : fileInfo.getFileName() != null)
+            return false;
+        if (getIdentifyCode() != null ? !getIdentifyCode().equals(fileInfo.getIdentifyCode()) : fileInfo.getIdentifyCode() != null)
+            return false;
+        if (getSaveName() != null ? !getSaveName().equals(fileInfo.getSaveName()) : fileInfo.getSaveName() != null)
+            return false;
+        if (getOwner() != null ? !getOwner().equals(fileInfo.getOwner()) : fileInfo.getOwner() != null) return false;
+        return getOwner_user() != null ? getOwner_user().equals(fileInfo.getOwner_user()) : fileInfo.getOwner_user() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getFid();
+        result = 31 * result + (getFileName() != null ? getFileName().hashCode() : 0);
+        temp = Double.doubleToLongBits(getFileSize());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (getIdentifyCode() != null ? getIdentifyCode().hashCode() : 0);
+        result = 31 * result + (int) (getCreateTime() ^ (getCreateTime() >>> 32));
+        result = 31 * result + (int) (getUpdateTime() ^ (getUpdateTime() >>> 32));
+        result = 31 * result + getDownloadCount();
+        result = 31 * result + (isPublic() ? 1 : 0);
+        result = 31 * result + (getSaveName() != null ? getSaveName().hashCode() : 0);
+        result = 31 * result + (getOwner() != null ? getOwner().hashCode() : 0);
+        result = 31 * result + (getOwner_user() != null ? getOwner_user().hashCode() : 0);
+        return result;
     }
 }
