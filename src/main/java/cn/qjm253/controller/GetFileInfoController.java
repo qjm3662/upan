@@ -42,6 +42,7 @@ public class GetFileInfoController extends BaseController {
             result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
             result.put("fileInfo", fileInfo);
         }else{
+            System.out.println("");
             result.put(CodeMSG.CODE, CodeMSG.CODE_ERROR);
             result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.CODE_ERROR));
         }
