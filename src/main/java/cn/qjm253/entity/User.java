@@ -26,6 +26,7 @@ public class User {
     @OneToMany(mappedBy = "owner_user", fetch = FetchType.LAZY)
     private Set<FileInfo> shares = new HashSet<FileInfo>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "other", fetch = FetchType.LAZY)
     private FollowInfo followInfo;
 
@@ -121,14 +122,6 @@ public class User {
 
     }
 
-//    public FollowInfo getFollowInfo() {
-//        return followInfo;
-//    }
-//
-//    public void setFollowInfo(FollowInfo followInfo) {
-//        this.followInfo = followInfo;
-//    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -139,7 +132,6 @@ public class User {
                 ", signature='" + signature + '\'' +
                 ", sex=" + sex +
                 ", shares=" + shares +
-//                ", followInfo=" + followInfo +
                 '}';
     }
 }

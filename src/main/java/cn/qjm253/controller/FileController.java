@@ -243,7 +243,7 @@ public class FileController extends BaseController {
     @RequestMapping(value = "/user/modifyAvatar", method = RequestMethod.POST, produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public
     @ResponseBody
-    Map<String, Object> modifyAvatar(@RequestParam(value = "file") CommonsMultipartFile file, HttpServletRequest request) {
+    Map<String, Object> modifyAvatar(@RequestParam(value = "avatar") CommonsMultipartFile file, HttpServletRequest request) {
         Map<String, Object> result = new HashMap<String, Object>();
         User user = auth.getUser(request);
         if (user == null) {       //未登录或者登录失效

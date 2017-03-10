@@ -2,7 +2,9 @@ package cn.qjm253.dao.daoImpl;
 
 import cn.qjm253.entity.User;
 import cn.qjm253.utils.Config;
+import cn.qjm253.utils.MyExclusionStrategy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
@@ -14,16 +16,16 @@ import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Arrays;
 
 /**
  * Created by qjm3662 on 2017/3/4 0004.
  */
 @Repository("auth")
 public class Auth {
-//    @Autowired
-//    private RedisTemplate<String, String> redisTemplate;
     @Autowired
-    private Gson gson;
+    private RedisTemplate<String, String> redisTemplate;
+    private Gson gson = new GsonBuilder().setExclusionStrategies(new MyExclusionStrategy()).create();
 
     /**
      * 登录函数
@@ -43,7 +45,7 @@ public class Auth {
         response.addCookie(cookie);
         HttpSession session = request.getSession();
         session.setAttribute(cookieName, value);
-//        redisTemplate.opsForValue().set(cookieName, value);
+        redisTemplate.opsForValue().set(cookieName, value);
     }
 
 
@@ -55,12 +57,18 @@ public class Auth {
     public User getUser(HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         if(cookies == null || cookies.length == 0){
+            System.out.println("cookie is null");
             return null;
         }
-        String cookieName = cookies[0].getValue();
-        HttpSession session = request.getSession();
-        String value = (String) session.getAttribute(cookieName);
-//        String value = redisTemplate.opsForValue().get(cookieName);
+        String cookieName = "";
+        for (Cookie c : cookies) {
+            if(c.getName().equals(Config.cookieName)){
+                cookieName = c.getValue();
+            }
+        }
+        System.out.println("cookieName : " + cookieName);
+        String value = redisTemplate.opsForValue().get(cookieName);
+        System.out.println("value" + value);
         if(value == null){
             return null;
         }

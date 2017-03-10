@@ -15,7 +15,7 @@ import java.util.Map;
 @Controller
 public class GetShareCenterController extends BaseController{
 
-    @RequestMapping(value = "/GetShareCenterAction", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
+    @RequestMapping(value = "/share", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public
     @ResponseBody
     Map<String, Object> getShareCenter(){

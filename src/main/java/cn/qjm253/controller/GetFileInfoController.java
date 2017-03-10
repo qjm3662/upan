@@ -31,14 +31,21 @@ public class GetFileInfoController extends BaseController {
     @RequestMapping(value = "/{identifyCode}", produces = "application/json;charset=UTF-8", headers = "Accept=application/json")
     public
     @ResponseBody
-    String GetFileInfo(@PathVariable String identifyCode) {
+    Map<String, Object> GetFileInfo(@PathVariable String identifyCode) {
+        Map<String, Object> result = new HashMap<String, Object>();
         String[] params = new String[]{"identifyCode"};
         String hql = "from FileInfo f";
         hql = createHql(hql, "f", params);
         FileInfo fileInfo = fileDao.query(hql, params, identifyCode);
         if(fileInfo != null && fileInfo.getOwner_user() != null){       //如果该文件是确有用户上传，就把用户的信息一并设置进去返回给客户端
             fileInfo.setOwner(new SimpleUserInfo(fileInfo.getOwner_user()));
+            result.put(CodeMSG.CODE, CodeMSG.SUCCESS);
+            result.put("fileInfo", fileInfo);
+        }else{
+            result.put(CodeMSG.CODE, CodeMSG.CODE_ERROR);
+            result.put(CodeMSG.ERR_MSG, CodeMSG.getCodeMSG(CodeMSG.CODE_ERROR));
         }
-        return gson.toJson(fileInfo, FileInfo.class);
+
+        return result;
     }
 }
